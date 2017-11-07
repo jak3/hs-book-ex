@@ -56,5 +56,3 @@ areCars = map isCar
 getManu :: Vehicle -> Manufacturer
 getManu (Plane _ _) = undefined
 getManu (Car m _)   = m
-
--- HOw Does your Garden Grow
