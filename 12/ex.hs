@@ -68,3 +68,24 @@ integerToNat = integerToNat' 0 Zero
       | i >  0    = integerToNat' (c+1) (Succ n) (i-1)
       | i == 0    = Just n
       | otherwise = Nothing
+
+myIterate :: (a -> a) -> a -> [a]
+myIterate f x = x : myIterate f (f x)
+
+myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
+myUnfoldr f x = (fst $ head tp) ++ myUnfoldr f (snd $ head tp)
+  where
+    tp = nn $ f x
+    nn Nothing         = []
+    nn (Just (a, b))   = [([a], b)]
+
+-- [Data.List implementation]
+
+--  unfoldr f b0 = build (\c n ->
+--    let go b = case f b of
+--                 Just (a, new_b) -> a `c` go new_b
+--                 Nothing         -> n
+--    in go b0)
+
+betterIterate :: (a -> a) -> a -> [a]
+betterIterate f x = undefined
