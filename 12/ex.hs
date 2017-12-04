@@ -79,13 +79,15 @@ myUnfoldr f x = (fst $ head tp) ++ myUnfoldr f (snd $ head tp)
     nn Nothing         = []
     nn (Just (a, b))   = [([a], b)]
 
--- [Data.List implementation]
-
+-- [Data.List implementation] --------------------------------------------------
+--
 --  unfoldr f b0 = build (\c n ->
 --    let go b = case f b of
 --                 Just (a, new_b) -> a `c` go new_b
 --                 Nothing         -> n
 --    in go b0)
+--
+-- -----------------------------------------------------------------------------
 
 betterIterate :: (a -> a) -> a -> [a]
-betterIterate f x = undefined
+betterIterate f = myUnfoldr (\x -> Just (x, f x))
