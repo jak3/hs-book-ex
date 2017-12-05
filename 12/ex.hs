@@ -75,9 +75,9 @@ myIterate f x = x : myIterate f (f x)
 myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
 myUnfoldr f x = (fst $ head tp) ++ myUnfoldr f (snd $ head tp)
   where
-    tp = nn $ f x
-    nn Nothing         = []
-    nn (Just (a, b))   = [([a], b)]
+    tp = case f x of
+          Just (a, b) -> [([a], b)]
+          Nothing     -> []
 
 -- [Data.List implementation] --------------------------------------------------
 --
@@ -91,3 +91,19 @@ myUnfoldr f x = (fst $ head tp) ++ myUnfoldr f (snd $ head tp)
 
 betterIterate :: (a -> a) -> a -> [a]
 betterIterate f = myUnfoldr (\x -> Just (x, f x))
+
+data BinaryTree a = Leaf
+                  | Node (BinaryTree a) a (BinaryTree a)
+                  deriving (Eq, Ord, Show)
+
+unfold :: (a -> Maybe (a, b, a)) -> a -> BinaryTree b
+unfold f x =
+    case f x of
+      Just (la, b, ra)  -> Node (unfold f la) b (unfold f ra)
+      Nothing           -> Leaf
+
+treeBuild :: Integer -> BinaryTree Integer
+treeBuild 0 = Leaf
+treeBuild n = Node red (n-1) red
+  where red = treeBuild $ n-1
+  -- MUST BE REVERSED
