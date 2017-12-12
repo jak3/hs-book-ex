@@ -103,7 +103,10 @@ unfold f x =
       Nothing           -> Leaf
 
 treeBuild :: Integer -> BinaryTree Integer
-treeBuild 0 = Leaf
-treeBuild n = Node red (n-1) red
-  where red = treeBuild $ n-1
-  -- MUST BE REVERSED
+treeBuild n = treeBuild' n 0
+  where
+    treeBuild' t b =
+      case t == b of
+        True  -> Leaf
+        False -> Node dig b dig
+      where dig = treeBuild' t (b+1)
